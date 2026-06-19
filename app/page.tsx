@@ -64,22 +64,22 @@ export default function Home() {
         {/* Mochi */}
 
         <Image
-          src="/img/cat.PNG"
+          src="/img/cat.png"
           alt="Mochi"
-          width={1500}
-          height={1500}
+          width={200}
+          height={250}
           priority
           className="
             absolute
             z-10
             animate-float-slow
             pointer-events-none
+            w-[5.5%] h-auto
           "
           style={{
-            left: "-0.5%",
-            top: "0.3%",
-            transform: "scale(1.4)",
-            transformOrigin: "top left",
+            left: "57%",
+            top: "63%",
+            transform: "translate(-50%, -50%)"
           }}
         />
 
