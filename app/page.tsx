@@ -12,9 +12,14 @@ type ModalType =
   | null;
 
 export default function Home() {
-  const [activeModal, setActiveModal] =
-    useState<ModalType>(null);
-  const [isChatOpen, setIsChatOpen] = useState(false);
+const [messages, setMessages] = useState<
+  { role: "user" | "assistant"; content: string }[]
+>([]);
+
+const [input, setInput] = useState("");
+const [loading, setLoading] = useState(false);
+const [isChatOpen, setIsChatOpen] = useState(false);
+const [activeModal, setActiveModal] = useState<ModalType>(null);
 
   const modalImages = {
     projects: "/img/modals/projects-frame.png",
@@ -23,6 +28,40 @@ export default function Home() {
     about: "/img/modals/about-frame.png",
     contact: "/img/modals/contact-frame.png",
   };
+const handleSend = async () => {
+  if (!input.trim()) return;
+
+  const userMessage = { role: "user", content: input };
+
+  const updatedMessages = [...messages, userMessage];
+  setMessages(updatedMessages);
+  setInput("");
+  setLoading(true);
+
+  try {
+    const res = await fetch("/api/chat", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ messages: updatedMessages }),
+    });
+
+    const data = await res.json();
+
+    const assistantMessage = {
+      role: "assistant",
+      content: data.reply,
+    };
+
+    setMessages([...updatedMessages, assistantMessage]);
+  } catch (err) {
+    setMessages([
+      ...updatedMessages,
+      { role: "assistant", content: "Error connecting to server." },
+    ]);
+  } finally {
+    setLoading(false);
+  }
+};
 
   return (
     <>
@@ -190,18 +229,38 @@ export default function Home() {
               </div>
 
               <div className="flex-1 overflow-y-auto px-6 py-5">
-                <div className="max-w-[80%] rounded-3xl bg-white/10 px-5 py-4 text-sm text-white">
-                  Hi! I'm Mochi 🐱. Ask me about projects or anything from Wednesday.
-                </div>
+                {messages.length === 0 && (
+                  <div className="max-w-[80%] rounded-3xl bg-white/10 px-5 py-4 text-sm text-white">
+                    Hi! I'm Mochi 🐱. Ask me about projects or anything from Wednesday.
+                  </div>
+                )}
+
+                {messages.map((msg, i) => (
+                  <div
+                    key={i}
+                    className={`max-w-[80%] rounded-3xl px-5 py-4 text-sm text-white mb-3 ${
+                      msg.role === "user" ? "bg-blue-500/40 ml-auto" : "bg-white/10"
+                    }`}
+                  >
+                    {msg.content}
+                  </div>
+                ))}
               </div>
 
               <div className="border-t border-white/15 bg-black/70 px-6 py-4 flex gap-3">
                 <input
-                  placeholder="Ask me anything..."
-                  className="w-full rounded-3xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-white/30"
-                />
-                <button className="rounded-3xl bg-white px-5 py-3 font-semibold text-black transition hover:bg-slate-100">
-                  Send
+                    value={input}
+                    onChange={(e) => setInput(e.target.value)}
+                    onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                    placeholder="Ask me anything..."
+                    className="w-full rounded-3xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-white/30"
+                  />
+                <button
+                  onClick={handleSend}
+                  disabled={loading}
+                  className="rounded-3xl bg-white px-5 py-3 font-semibold text-black transition hover:bg-slate-100"
+                >
+                  {loading ? "..." : "Send"}
                 </button>
               </div>
             </div>
