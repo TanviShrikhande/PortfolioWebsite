@@ -145,6 +145,7 @@ const handleSend = async () => {
               strokeWidth="0"
               style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("projects")}
+              style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
 
             {/* Achievements */}
@@ -158,6 +159,7 @@ const handleSend = async () => {
               strokeWidth="0"
               style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("achievements")}
+              style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
 
             {/* Skills */}
@@ -171,6 +173,7 @@ const handleSend = async () => {
               strokeWidth="0"
               style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("skills")}
+              style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
 
             {/* About */}
@@ -184,6 +187,7 @@ const handleSend = async () => {
               strokeWidth="0"
               style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("about")}
+              style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
 
             {/* Contact */}
@@ -197,6 +201,7 @@ const handleSend = async () => {
               strokeWidth="0"
               style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("contact")}
+              style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
 
           </svg>
