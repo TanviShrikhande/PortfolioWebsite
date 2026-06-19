@@ -54,11 +54,12 @@ export default function Home() {
             z-10
             animate-float-slow
             pointer-events-none
-            
+            w-[8.5%]   /* 👈 control size here */
+            h-auto
           "
           style={{
-            left: "-1.3%",
-            top: "-5%",
+            left: "42.5%",
+            top: "47%",
           }}
         />
 
