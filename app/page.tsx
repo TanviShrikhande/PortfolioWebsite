@@ -14,6 +14,7 @@ type ModalType =
 export default function Home() {
   const [activeModal, setActiveModal] =
     useState<ModalType>(null);
+  const [isChatOpen, setIsChatOpen] = useState(false);
 
   const modalImages = {
     projects: "/img/modals/projects-frame.png",
@@ -73,20 +74,23 @@ export default function Home() {
             absolute
             z-10
             animate-float-slow
-            pointer-events-none
             w-[5.5%] h-auto
           "
           style={{
             left: "57%",
             top: "63%",
-            transform: "translate(-50%, -50%)"
+            transform: "translate(-50%, -50%)",
+            cursor: "pointer",
           }}
+          onClick={() => setIsChatOpen(true)}
+          draggable={false}
+          onDragStart={(e) => e.preventDefault()}
         />
 
           {/* SVG Overlay */}
 
           <svg
-            className="absolute inset-0 w-full h-full z-20"
+            className="absolute inset-0 w-full h-full z-20 pointer-events-none"
             viewBox="0 0 1664 1190"
           >
 
@@ -160,6 +164,49 @@ export default function Home() {
         </div>
 
       </main>
+
+      {/* Chat Modal */}
+
+      {isChatOpen && (
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 py-6">
+          <div className="relative w-full max-w-[1200px] h-[90vh] rounded-[32px] overflow-hidden shadow-2xl">
+            <div className="absolute inset-0">
+              <div className="absolute inset-0 bg-black/70" />
+            </div>
+
+            <div className="relative z-10 flex h-full flex-col">
+              <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-white/15">
+                <div>
+                  <h2 className="text-3xl font-bold text-white">Ask Mochi</h2>
+                  <p className="text-sm text-slate-300">Resume-aware assistant</p>
+                </div>
+                <button
+                  onClick={() => setIsChatOpen(false)}
+                  className="rounded-full bg-white/90 px-4 py-2 text-black transition hover:bg-white"
+                >
+                  Close
+                </button>
+              </div>
+
+              <div className="flex-1 overflow-y-auto px-6 py-5">
+                <div className="max-w-[80%] rounded-3xl bg-white/10 px-5 py-4 text-sm text-white">
+                  Hi! I'm Mochi 🐱. Ask me about projects or anything from Wednesday.
+                </div>
+              </div>
+
+              <div className="border-t border-white/15 bg-black/70 px-6 py-4 flex gap-3">
+                <input
+                  placeholder="Ask me anything..."
+                  className="w-full rounded-3xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-white/30"
+                />
+                <button className="rounded-3xl bg-white px-5 py-3 font-semibold text-black transition hover:bg-slate-100">
+                  Send
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
 
       {/* Modal */}
 
