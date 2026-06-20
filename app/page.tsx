@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import ReactMarkdown from "react-markdown";
 
 type ModalType =
@@ -12,6 +12,15 @@ type ModalType =
   | "contact"
   | null;
 
+const loadingFrames = [
+  "/img/loading/loading.png",
+  "/img/loading/loading (1).png",
+  "/img/loading/loading (2).png",
+  "/img/loading/loading (3).png",
+  "/img/loading/loading (4).png",
+  "/img/loading/loading(5).png",
+];
+
 export default function Home() {
 const [messages, setMessages] = useState<
   { role: "user" | "assistant"; content: string }[]
@@ -19,8 +28,27 @@ const [messages, setMessages] = useState<
 
 const [input, setInput] = useState("");
 const [loading, setLoading] = useState(false);
+const [pageLoading, setPageLoading] = useState(true);
+const [loadingFrame, setLoadingFrame] = useState(0);
 const [isChatOpen, setIsChatOpen] = useState(false);
 const [activeModal, setActiveModal] = useState<ModalType>(null);
+
+  useEffect(() => {
+    const frameCount = loadingFrames.length;
+    const interval = window.setInterval(() => {
+      setLoadingFrame((current) => (current + 1) % frameCount);
+    }, 500);
+
+    const timeout = window.setTimeout(() => {
+      clearInterval(interval);
+      setPageLoading(false);
+    }, 3000);
+
+    return () => {
+      clearInterval(interval);
+      clearTimeout(timeout);
+    };
+  }, []);
 
   const modalImages = {
     projects: "/img/modals/projects-frame.png",
@@ -66,9 +94,23 @@ const handleSend = async () => {
 
   return (
     <>
-      <main className="min-h-screen bg-black flex items-center justify-center">
+      {pageLoading && (
+        <div className="fixed inset-0 z-[999] bg-[#04040b]">
+          <img
+            src={loadingFrames[loadingFrame]}
+            alt="Loading animation"
+            className="h-full w-full object-cover select-none"
+            draggable={false}
+          />
+        </div>
+      )}
 
-        <div className="relative w-full max-w-[1600px]">
+      <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.05),transparent_30%),linear-gradient(180deg,#09050b,#110914)] flex items-center justify-center">
+        <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.05),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.82))] pointer-events-none" />
+        <div
+          className="relative w-full max-w-[1600px] transition-opacity duration-700 ease-out"
+          style={{ opacity: pageLoading ? 0 : 1 }}
+        >
 
           {/* Cafe Background */}
 
@@ -213,9 +255,9 @@ const handleSend = async () => {
       {/* Chat Modal */}
 
       {isChatOpen && (
-        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 px-4 py-6">
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 px-4 py-6 animate-tv-show">
           <div
-            className="relative w-full max-w-[1200px] h-[90vh] rounded-[44px] overflow-hidden shadow-[0_35px_90px_rgba(0,0,0,0.45)] border border-[#9f7a69]/30"
+            className="relative w-full max-w-[1200px] h-[90vh] rounded-[44px] overflow-hidden shadow-[0_35px_90px_rgba(0,0,0,0.45)] border border-[#9f7a69]/30 animate-scale-up"
             style={{
               background:
                 "linear-gradient(180deg, rgba(255,241,223,0.96) 0%, rgba(236,176,139,0.92) 40%, rgba(57,35,26,0.96) 100%)",
@@ -279,9 +321,9 @@ const handleSend = async () => {
       {/* Modal */}
 
       {activeModal && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50">
+        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 animate-tv-show">
 
-          <div className="relative">
+          <div className="relative animate-scale-up">
 
             <button
               onClick={() => setActiveModal(null)}
