@@ -105,12 +105,34 @@ const handleSend = async () => {
         </div>
       )}
 
-      <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(255,255,255,0.05),transparent_30%),linear-gradient(180deg,#09050b,#110914)] flex items-center justify-center">
+      <main className="relative min-h-screen overflow-hidden bg-[radial-gradient(circle_at_top,rgba(43, 5, 5, 0.05),transparent_30%),linear-gradient(180deg,#09050b,#110914)] flex items-center justify-center">
+        <div
+          className="
+            absolute
+            left-1/2
+            top-1/2
+            -translate-x-1/2
+            -translate-y-1/2
+            w-[1200px]
+            h-[1200px]
+            rounded-full
+            pointer-events-none
+          "
+          style={{
+            background:
+              "radial-gradient(circle, rgba(255,190,150,0.18), transparent 70%)",
+            filter: "blur(80px)",
+          }}
+        />
         <div className="absolute inset-0 bg-[radial-gradient(circle,rgba(255,255,255,0.05),transparent_18%),linear-gradient(180deg,rgba(255,255,255,0.02),rgba(0,0,0,0.82))] pointer-events-none" />
         <div
-          className="relative w-full max-w-[1600px] transition-opacity duration-700 ease-out"
-          style={{ opacity: pageLoading ? 0 : 1 }}
+          className="relative w-[140vw] max-w-[1760px] transition-opacity duration-700 ease-out"
+          style={{
+            opacity: pageLoading ? 0 : 1,
+            transform: "scale(1.35)",
+          }}
         >
+          
 
           {/* Cafe Background */}
 
