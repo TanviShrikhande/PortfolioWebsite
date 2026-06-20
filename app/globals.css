@@ -24,6 +24,12 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+
+.chat-message {
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
 @keyframes floatSlow {
   0% {
     transform: translateY(0px);

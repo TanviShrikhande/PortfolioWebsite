@@ -117,8 +117,16 @@ def chat(query: Query):
     # 2. retrieve context
     context = search(q_emb, top_k=3)
 
+    # 3. portolio context
+    with open(
+        r"E:\portfolio\portfolio\backend\data\portfolio_context.md",
+        "r",
+        encoding="utf-8"
+    ) as file:
+        text_content = file.read()
+
     # 3. build prompt
-    prompt = build_prompt("\n\n".join(context), query.message)
+    prompt = build_prompt("\n\n".join(context), text_content, query.message)
 
     # 4. LLM response
     try:
