@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
+import ReactMarkdown from "react-markdown";
 
 type ModalType =
   | "projects"
@@ -42,7 +43,7 @@ const handleSend = async () => {
     const res = await fetch("/api/chat", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ messages: updatedMessages }),
+      body: JSON.stringify({ message: userMessage.content }),
     });
 
     const data = await res.json();
@@ -143,7 +144,10 @@ const handleSend = async () => {
               height="156"
               fill="rgba(255,0,0,0.01)"
               strokeWidth="0"
-              style={{ cursor: "pointer" }}
+              style={{
+                cursor: "pointer",
+                pointerEvents: "auto",
+              }}
               onClick={() => setActiveModal("projects")}
               style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
@@ -157,7 +161,6 @@ const handleSend = async () => {
               height="80"
               fill="rgba(0,0,255,0.01)"
               strokeWidth="0"
-              style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("achievements")}
               style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
@@ -170,8 +173,7 @@ const handleSend = async () => {
               width="310"
               height="270"
               fill="rgba(0,255,0,0.01)"
-              strokeWidth="0"
-              style={{ cursor: "pointer" }}
+              strokeWidth="0" 
               onClick={() => setActiveModal("skills")}
               style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
@@ -185,7 +187,6 @@ const handleSend = async () => {
               height="95"
               fill="rgba(255,0,255,0.01)"
               strokeWidth="0"
-              style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("about")}
               style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
@@ -199,7 +200,6 @@ const handleSend = async () => {
               height="70"
               fill="rgba(255,255,0,0.01)"
               strokeWidth="0"
-              style={{ cursor: "pointer" }}
               onClick={() => setActiveModal("contact")}
               style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
@@ -213,57 +213,60 @@ const handleSend = async () => {
       {/* Chat Modal */}
 
       {isChatOpen && (
-        <div className="fixed inset-0 bg-black/80 flex items-center justify-center z-50 px-4 py-6">
-          <div className="relative w-full max-w-[1200px] h-[90vh] rounded-[32px] overflow-hidden shadow-2xl">
-            <div className="absolute inset-0">
-              <div className="absolute inset-0 bg-black/70" />
-            </div>
-
+        <div className="fixed inset-0 bg-black/75 backdrop-blur-sm flex items-center justify-center z-50 px-4 py-6">
+          <div
+            className="relative w-full max-w-[1200px] h-[90vh] rounded-[44px] overflow-hidden shadow-[0_35px_90px_rgba(0,0,0,0.45)] border border-[#9f7a69]/30"
+            style={{
+              background:
+                "linear-gradient(180deg, rgba(255,241,223,0.96) 0%, rgba(236,176,139,0.92) 40%, rgba(57,35,26,0.96) 100%)",
+            }}
+          >
             <div className="relative z-10 flex h-full flex-col">
-              <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-white/15">
+              <div className="flex items-center justify-between gap-4 px-6 py-5 border-b border-[#d3b8a0]/40 bg-[#f8e5d6]/90">
                 <div>
-                  <h2 className="text-3xl font-bold text-white">Ask Mochi</h2>
-                  <p className="text-sm text-slate-300">Resume-aware assistant</p>
+                  <h2 className="text-3xl font-bold text-[#3c2318]">Ask Mochi</h2>
+                  <p className="text-sm text-[#5f3c2f]">Resume-aware assistant</p>
                 </div>
                 <button
                   onClick={() => setIsChatOpen(false)}
-                  className="rounded-full bg-white/90 px-4 py-2 text-black transition hover:bg-white"
+                  className="rounded-full bg-[#6b4b3d] px-4 py-2 text-white transition hover:bg-[#8a6758]"
                 >
                   Close
                 </button>
               </div>
 
               <div className="flex-1 overflow-y-auto px-6 py-5">
-                {messages.length === 0 && (
-                  <div className="max-w-[80%] rounded-3xl bg-white/10 px-5 py-4 text-sm text-white">
-                    Hi! I'm Mochi 🐱. Ask me about projects or anything from Wednesday.
-                  </div>
-                )}
 
                 {messages.map((msg, i) => (
                   <div
                     key={i}
-                    className={`max-w-[80%] rounded-3xl px-5 py-4 text-sm text-white mb-3 ${
-                      msg.role === "user" ? "bg-blue-500/40 ml-auto" : "bg-white/10"
+                    className={`max-w-[80%] rounded-3xl px-5 py-4 mb-3 shadow-sm border border-white/10 ${
+                      msg.role === "user"
+                        ? "ml-auto bg-[#f0c3ab]/95 text-[#2f1b13]"
+                        : "bg-[#38291f]/95 text-[#f5e8da]"
                     }`}
                   >
-                    {msg.content}
+                    <div className="chat-message break-words text-sm leading-7">
+                    <ReactMarkdown>
+                      {msg.content}
+                    </ReactMarkdown>
+                  </div>
                   </div>
                 ))}
               </div>
 
-              <div className="border-t border-white/15 bg-black/70 px-6 py-4 flex gap-3">
+              <div className="border-t border-[#d2b4a2]/40 bg-[#2f1f18]/90 px-6 py-4 flex gap-3">
                 <input
-                    value={input}
-                    onChange={(e) => setInput(e.target.value)}
-                    onKeyDown={(e) => e.key === "Enter" && handleSend()}
-                    placeholder="Ask me anything..."
-                    className="w-full rounded-3xl border border-white/15 bg-white/10 px-4 py-3 text-white outline-none placeholder:text-slate-400 focus:border-white/30"
-                  />
+                  value={input}
+                  onChange={(e) => setInput(e.target.value)}
+                  onKeyDown={(e) => e.key === "Enter" && handleSend()}
+                  placeholder="Ask me anything..."
+                  className="w-full rounded-3xl border border-[#e4d0c1] bg-[#fff4e9]/90 px-4 py-3 text-[#3e2b24] outline-none placeholder:text-[#8b7365] focus:border-[#d8ae8c] focus:ring-2 focus:ring-[#e4c1a9]/50"
+                />
                 <button
                   onClick={handleSend}
                   disabled={loading}
-                  className="rounded-3xl bg-white px-5 py-3 font-semibold text-black transition hover:bg-slate-100"
+                  className="rounded-3xl bg-[#6b4b3d] px-5 py-3 font-semibold text-white transition hover:bg-[#835a4f] disabled:cursor-not-allowed disabled:bg-[#a48e84]"
                 >
                   {loading ? "..." : "Send"}
                 </button>
