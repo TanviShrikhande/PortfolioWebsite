@@ -236,7 +236,6 @@ const handleSend = async () => {
                 pointerEvents: "auto",
               }}
               onClick={() => setActiveModal("projects")}
-              style={{ cursor: "pointer", pointerEvents: "auto" }}
             />
 
             {/* Achievements */}
