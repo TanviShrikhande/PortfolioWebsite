@@ -193,7 +193,7 @@ const handleSend = async () => {
         {/* Mochi */}
 
         <Image
-          src="/img/cat.png"
+          src="/img/cat.PNG"
           alt="Mochi"
           width={200}
           height={250}
