@@ -60,37 +60,60 @@ const [activeModal, setActiveModal] = useState<ModalType>(null);
 const handleSend = async () => {
   if (!input.trim()) return;
 
-  const userMessage = { role: "user", content: input };
+
+  type ChatMessage = {
+  role: "user" | "assistant";
+  content: string;
+  };
+
+  const userMessage: ChatMessage = {
+  role: "user",
+  content: input,
+  };
 
   const updatedMessages = [...messages, userMessage];
   setMessages(updatedMessages);
   setInput("");
   setLoading(true);
-
+  
   try {
-    const res = await fetch("/api/chat", {
+    const response = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: userMessage.content }),
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ message: input }),
     });
 
-    const data = await res.json();
+    if (!response.ok) {
+      throw new Error("Request failed");
+    }
 
-    const assistantMessage = {
-      role: "assistant",
-      content: data.reply,
-    };
+    const data = await response.json();
 
-    setMessages([...updatedMessages, assistantMessage]);
-  } catch (err) {
     setMessages([
       ...updatedMessages,
-      { role: "assistant", content: "Error connecting to server." },
+      {
+        role: "assistant",
+        content: data.reply,
+      },
+    ]);
+
+  } catch (err) {
+    console.error(err);
+
+    setMessages([
+      ...updatedMessages,
+      {
+        role: "assistant",
+        content: "Error connecting to server.",
+      },
     ]);
   } finally {
     setLoading(false);
   }
 };
+
 
   return (
     <>
