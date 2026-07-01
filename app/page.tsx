@@ -213,6 +213,7 @@ const handleSend = async () => {
           onClick={() => setIsChatOpen(true)}
           draggable={false}
           onDragStart={(e) => e.preventDefault()}
+          unoptimized
         />
 
           {/* SVG Overlay */}
